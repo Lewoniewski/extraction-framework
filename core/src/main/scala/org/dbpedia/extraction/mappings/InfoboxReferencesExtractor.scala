@@ -220,7 +220,7 @@ extends PageNodeExtractor
                                         quads += new Quad(language, DBpediaDatasets.MappedInfoboxReferences, subjectUri+"#ref:"+refCount, isMapped, refValue, property.sourceIri, rdfLangStrDt)
                                     }
                                     //CitationExtractor need to be fixed: template names without whitespace are ignored (eq. "{{citeweb|...}}
-                                    val templateToExt = new WikiPage(node.title,refValue.replace("|", " |"))
+                                    val templateToExt = new WikiPage(node.title,refValue.replace("|", " | "))
                                     val citExtRes = citExt.extract(templateToExt,"")
                                     for (qwa <- citExtRes) {
                                         var qWa2 = new Quad(language, DBpediaDatasets.InfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
@@ -251,7 +251,7 @@ extends PageNodeExtractor
                                             if (isMapped != "") {
                                                 quads += new Quad(language, DBpediaDatasets.MappedInfoboxReferences, subjectUri+"#ref:"+refCount, isMapped, refNames(nameRe), property.sourceIri, rdfLangStrDt)
                                             }
-                                            val templateToExt = new WikiPage(node.title,refNames(nameRe).replace("|", " |"))
+                                            val templateToExt = new WikiPage(node.title,refNames(nameRe).replace("|", " | "))
                                             val citExtRes = citExt.extract(templateToExt,"")
                                             for (qwa <- citExtRes) {
                                                 var qWa2 = new Quad(language, DBpediaDatasets.InfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
@@ -286,7 +286,7 @@ extends PageNodeExtractor
                                                 if (isMapped != "") {
                                                     quads += new Quad(language, DBpediaDatasets.MappedInfoboxReferences, subjectUri+"#ref:"+refCount, isMapped, refNames(refiz.replace("\\", "")), property.sourceIri, rdfLangStrDt)
                                                 }
-                                                val templateToExt = new WikiPage(node.title,refNames(refiz.replace("\\", "").replace("|", " |")))
+                                                val templateToExt = new WikiPage(node.title,refNames(refiz.replace("\\", "")).replace("|", " | "))
                                                 val citExtRes = citExt.extract(templateToExt,"")
                                                 for (qwa <- citExtRes) {
                                                     var qWa2 = new Quad(language, DBpediaDatasets.InfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
