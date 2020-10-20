@@ -230,9 +230,9 @@ extends PageNodeExtractor
                                         }
                                         quads += qWa2
                                         if (isMapped != "") {
-                                            var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, qwa.value, qwa.context, rdfLangStrDt)
+                                            var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
                                             if (qWa3.predicate.contains("isCitedBy")){
-                                                qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
+                                                qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
                                             }
                                             quads += qWa3
                                         }
@@ -261,9 +261,9 @@ extends PageNodeExtractor
                                                 }
                                                 quads += qWa2
                                             if (isMapped != "") {
-                                                var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, qwa.value, qwa.context, rdfLangStrDt)
+                                                var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
                                                 if (qWa3.predicate.contains("isCitedBy")){
-                                                    qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
+                                                    qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
                                                 }
                                                 quads += qWa3
                                             }
@@ -295,9 +295,9 @@ extends PageNodeExtractor
                                                     }
                                                     quads += qWa2
                                                     if (isMapped != "") {
-                                                        var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, qwa.value, qwa.context, rdfLangStrDt)
+                                                        var qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, qwa.value, qwa.context, rdfLangStrDt)
                                                         if (qWa3.predicate.contains("isCitedBy")){
-                                                            qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, isMapped, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
+                                                            qWa3 = new Quad(language, DBpediaDatasets.MappedInfoboxReferences, qwa.subject, qwa.predicate, subjectUri+"#ref:"+refCount, qwa.context, rdfLangStrDt)
                                                         }
                                                         quads += qWa3
                                                     }
