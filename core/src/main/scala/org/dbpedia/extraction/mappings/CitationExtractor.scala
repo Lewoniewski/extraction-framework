@@ -23,13 +23,13 @@ import scala.util.{Failure, Success}
  * to boostrap this it is based on the infoboxExtractor
  */
 class CitationExtractor(
-  context : {
-    def ontology : Ontology
-    def language : Language
-    def redirects : Redirects 
-  } 
-) 
-extends WikiPageExtractor
+                         context : {
+                             def ontology : Ontology
+                             def language : Language
+                             def redirects : Redirects
+                         }
+                       )
+  extends WikiPageExtractor
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Configuration
@@ -74,7 +74,9 @@ extends WikiPageExtractor
 
     //FIXME put this in a config!
     private val citationTemplatesRegex = List("cite.*".r, "citation.*".r, "literatur.*".r, "internetquelle.*".r, "bib.*".r,
-     "статья.*".r, "книга.*".r, "публикация.*".r, "cita.*".r, "cytuj.*".r, "citare.*".r, "citat.*".r, "kilde.*".r)
+        "статья.*".r, "книга.*".r, "публикация.*".r, "cita.*".r, "cytuj.*".r, "citare.*".r, "citat.*".r, "kilde.*".r,
+        "lien web.*".r, "ouvrage.*".r, "article.*".r, "citar.*".r, "стаття.*".r, "webbref.*".r, "tidskriftsref.*".r,
+        "bokref.*".r, "tidningsref.*".r, "citeer.*".r, "chemref.*".r)
 
     private val typeProperty = ontology.properties("rdf:type")
     //private val rdfLangStrDt = ontology.datatypes("rdf:langString")
@@ -106,8 +108,8 @@ extends WikiPageExtractor
 
 
     private val unitValueParsers = ontology.datatypes.values
-                                   .filter(_.isInstanceOf[DimensionDatatype])
-                                   .map(dimension => new UnitValueParser(context, dimension, true))
+      .filter(_.isInstanceOf[DimensionDatatype])
+      .map(dimension => new UnitValueParser(context, dimension, true))
 
     //TODO remove number parsers for now, they mess with isbn etc
     //private val intParser = new IntegerParser(context, true, validRange = (i => i%1==0))
@@ -115,10 +117,10 @@ extends WikiPageExtractor
     //private val doubleParser = new DoubleParser(context, true)
 
     private val dateTimeParsers = List("xsd:date", "xsd:gMonthYear", "xsd:gMonthDay", "xsd:gMonth" /*, "xsd:gYear", "xsd:gDay"*/)
-                                  .map(datatype => new DateTimeParser(context, new Datatype(datatype), true))
+      .map(datatype => new DateTimeParser(context, new Datatype(datatype), true))
 
     private val singleGeoCoordinateParser = new SingleGeoCoordinateParser(context)
-                                  
+
     private val objectParser = new ObjectParser(context, true)
 
     private val linkParser = new LinkParser(true)
@@ -128,7 +130,7 @@ extends WikiPageExtractor
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private val seenProperties = mutable.HashSet[String]()
-    
+
     override val datasets = Set(DBpediaDatasets.CitationData, DBpediaDatasets.CitationLinks /*, DBpediaDatasets.CitationTypes*/)
 
 
@@ -157,7 +159,7 @@ extends WikiPageExtractor
              template <- ExtractorUtils.collectTemplatesFromNodeTransitive(node)
              resolvedTitle = context.redirects.resolve(template.title).decoded.toLowerCase
              if citationTemplatesRegex.exists(regex => regex.findFirstMatchIn(resolvedTitle).isDefined)
-        } {
+             } {
 
             val citationIri = getCitationIRI(template).toString
 
@@ -198,7 +200,7 @@ extends WikiPageExtractor
         extractDates(node) match
         {
             case dates if dates.nonEmpty => return dates
-            case _ => 
+            case _ =>
         }
         extractSingleCoordinate(node).foreach(result =>  return List(result))
         //extractNumber(node).foreach(result =>  return List(result)) //TODO remove number parsing for now
@@ -214,9 +216,9 @@ extends WikiPageExtractor
     private def extractUnitValue(node : PropertyNode) : Option[ParseResult[String]] =
     {
         val unitValues =
-        for (unitValueParser <- unitValueParsers;
-             pr <- unitValueParser.parse(node) )
-             yield pr
+            for (unitValueParser <- unitValueParsers;
+                 pr <- unitValueParser.parse(node) )
+                yield pr
 
         if (unitValues.size > 1)
         {
@@ -250,7 +252,7 @@ extends WikiPageExtractor
             case _ => None
         }
     }
-    
+
     private def extractSingleCoordinate(node : PropertyNode) : Option[ParseResult[String]] =
     {
         singleGeoCoordinateParser.parse(node).foreach(value => return Some(ParseResult(value.value.toDouble.toString, None, Some(new Datatype("xsd:double")))))
@@ -273,7 +275,7 @@ extends WikiPageExtractor
             case _ => List.empty
         }
     }
-    
+
     private def extractDate(node : PropertyNode) : Option[ParseResult[String]] =
     {
         for (dateTimeParser <- dateTimeParsers;
@@ -294,7 +296,7 @@ extends WikiPageExtractor
             case links if links.size == splitNodes.size => return links
             case _ => List.empty
         }
-        
+
         splitNodes.flatMap(splitNode => linkParser.parse(splitNode)) match
         {
             // TODO: explain why we check links.size == splitNodes.size
@@ -302,7 +304,7 @@ extends WikiPageExtractor
             case _ => List.empty
         }
     }
-    
+
     private def getPropertyUri(key : String) : String =
     {
         // convert property key to camelCase
@@ -390,8 +392,8 @@ extends WikiPageExtractor
             case Some(pr) => Some(pr.value)
             case _ => UriUtils.createURI(propertyNode.children.flatMap(_.toPlainText).mkString.trim) match{
                 case Success(iri) => if (iri.isAbsolute)
-                        Some(iri)
-                    else None
+                    Some(iri)
+                else None
                 case Failure(f) => None
             }
         }
@@ -420,11 +422,11 @@ extends WikiPageExtractor
         template append templateNode.title.decoded append  "{"
 
         templateNode.children
-            .filter(_.children.nonEmpty)
-            .sortWith(_.key > _.key)
-            .foreach( p => {
-                template append '|' append  p.key append '=' append p.children.flatMap(_.toPlainText).mkString.trim
-            })
+          .filter(_.children.nonEmpty)
+          .sortWith(_.key > _.key)
+          .foreach( p => {
+              template append '|' append  p.key append '=' append p.children.flatMap(_.toPlainText).mkString.trim
+          })
 
         template append "}"
 
@@ -433,9 +435,9 @@ extends WikiPageExtractor
           digest(template.toString().getBytes())
           .map(0xFF & _).map {
             "%02x".format(_)
-            }.foldLeft("") {
-              _ + _
-            }
+        }.foldLeft("") {
+            _ + _
+        }
         UriUtils.createURI("http://citation.dbpedia.org/hash/" + shaHash).toOption
     }
 }
